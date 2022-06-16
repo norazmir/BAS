@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/fireblaze/AndroidStudioProjects/BAS/app/src/main/res/drawable-v24/ic_qr_code.xml" value="0.2895" />
+        <entry key="..\:/Users/fireblaze/AndroidStudioProjects/BAS/app/src/main/res/layout/activity_generate_barcode.xml" value="0.3489583333333333" />
+        <entry key="..\:/Users/fireblaze/AndroidStudioProjects/BAS/app/src/main/res/layout/activity_login.xml" value="0.16945288753799392" />
+        <entry key="..\:/Users/fireblaze/AndroidStudioProjects/BAS/app/src/main/res/layout/activity_scan_barcode.xml" value="0.18070652173913043" />
+        <entry key="..\:/Users/fireblaze/AndroidStudioProjects/BAS/app/src/main/res/layout/activity_student_detail.xml" value="0.46657381615598886" />
+        <entry key="..\:/Users/fireblaze/AndroidStudioProjects/BAS/app/src/main/res/layout/loading_item.xml" value="0.25" />
         <entry key="..\:/Users/fireblaze/AndroidStudioProjects/STRACE/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.15" />
         <entry key="..\:/Users/fireblaze/AndroidStudioProjects/STRACE/app/src/main/res/layout-w936dp/activity_login.xml" value="0.12815608263198164" />
         <entry key="..\:/Users/fireblaze/AndroidStudioProjects/STRACE/app/src/main/res/layout/activity_login.xml" value="0.1697061803444782" />

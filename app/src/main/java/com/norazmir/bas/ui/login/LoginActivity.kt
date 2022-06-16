@@ -18,6 +18,7 @@ import com.norazmir.bas.R
 
 class LoginActivity : AppCompatActivity() {
 
+
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
 
