@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.budiyev.android.codescanner.*
 import com.norazmir.bas.R
+import com.norazmir.bas.ui.student.StudentDetailsActivity
 import com.norazmir.bas.utils.LoadingDialog
 import kotlinx.android.synthetic.main.activity_scan_barcode.*
 
@@ -40,7 +41,7 @@ class ScanBarcodeActivity : AppCompatActivity(){
             formats = CodeScanner.ALL_FORMATS
 
             autoFocusMode = AutoFocusMode.SAFE
-            scanMode = ScanMode.CONTINUOUS
+            scanMode = ScanMode.SINGLE
             isAutoFocusEnabled = true
             isFlashEnabled = false
 
@@ -49,9 +50,9 @@ class ScanBarcodeActivity : AppCompatActivity(){
                     tv_textview.text = it.text
                     loading.startLoading()
                     val handler = Handler()
-                    handler.postDelayed({ loading.isDismiss() },5000)
+                    handler.postDelayed({ loading.isDismiss() },4000)
                 }
-                val intent = Intent(applicationContext, GenerateBarcodeActivity::class.java)
+                val intent = Intent(applicationContext, StudentDetailsActivity::class.java)
                 startActivity(intent)
             }
 

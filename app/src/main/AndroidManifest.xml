@@ -44,6 +44,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.norazmir.bas.ui.student.StudentDetailsActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+        </activity>
 
     </application>
 

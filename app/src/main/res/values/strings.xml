@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">STRACE</string>
+    <string name="app_name">BAS</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
