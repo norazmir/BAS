@@ -3,37 +3,47 @@ package com.norazmir.bas.ui.barcode
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.budiyev.android.codescanner.*
 import com.norazmir.bas.R
+import com.norazmir.bas.data.student.SQLiteHelper
+import com.norazmir.bas.data.student.StudentDao
 import com.norazmir.bas.ui.student.StudentDetailsActivity
 import com.norazmir.bas.utils.LoadingDialog
 import kotlinx.android.synthetic.main.activity_scan_barcode.*
+import java.nio.file.attribute.AclEntry
 
 private const val CAMERA_REQUEST_CODE = 101
 
 @Suppress("DEPRECATION")
-class ScanBarcodeActivity : AppCompatActivity(){
+class ScanBarcodeActivity : AppCompatActivity() {
 
     private lateinit var codeScanner: CodeScanner
+    var dbHandler:SQLiteHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_barcode)
 
+
         setupPersmissions()
         codeScanner()
-
     }
 
-    private fun codeScanner(){
+    private fun codeScanner() {
         val loading = LoadingDialog(this)
+        var builder = AlertDialog.Builder(this)
+        dbHandler = SQLiteHelper(this)
+
 
         codeScanner = CodeScanner(this, scanner_view)
         codeScanner.apply {
@@ -46,18 +56,30 @@ class ScanBarcodeActivity : AppCompatActivity(){
             isFlashEnabled = false
 
             decodeCallback = DecodeCallback {
-                runOnUiThread{
+                runOnUiThread {
                     tv_textview.text = it.text
+                    var studentID = tv_textview.text.toString()
                     loading.startLoading()
-                    val handler = Handler()
-                    handler.postDelayed({ loading.isDismiss() },4000)
+                    Handler(Looper.myLooper()!!).postDelayed({
+                        loading.isDismiss()
+                        dbHandler!!.getStudentDetails(studentID)
+                        builder.setTitle("Validation Result")
+                            .setMessage("Student ID Validation success !")
+                            .setPositiveButton("OK") { _, _ ->
+                                startActivity(
+                                    Intent(
+                                        applicationContext,
+                                        StudentDetailsActivity::class.java
+                                    )
+                                )
+                            }.show()
+                    }, 2000)
                 }
-                val intent = Intent(applicationContext, StudentDetailsActivity::class.java)
-                startActivity(intent)
+
             }
 
             errorCallback = ErrorCallback {
-                runOnUiThread{
+                runOnUiThread {
                     Log.e("Main", "Camera initialization error: ${it.message}")
                 }
             }
@@ -78,26 +100,38 @@ class ScanBarcodeActivity : AppCompatActivity(){
         codeScanner.releaseResources()
     }
 
-    private fun setupPersmissions(){
-        val permission = ContextCompat.checkSelfPermission(this,
-        Manifest.permission.CAMERA)
+    private fun setupPersmissions() {
+        val permission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        )
 
-        if (permission != PackageManager.PERMISSION_GRANTED){
+        if (permission != PackageManager.PERMISSION_GRANTED) {
             makeRequest()
         }
     }
 
     private fun makeRequest() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA),
-                                        CAMERA_REQUEST_CODE)
+        ActivityCompat.requestPermissions(
+            this, arrayOf(Manifest.permission.CAMERA),
+            CAMERA_REQUEST_CODE
+        )
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when(requestCode){
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
             CAMERA_REQUEST_CODE -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "You need the camera permission to be able to use the app!", Toast.LENGTH_SHORT).show()
-                } else{
+                    Toast.makeText(
+                        this,
+                        "You need the camera permission to be able to use the app!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
                     //successful
                 }
             }
