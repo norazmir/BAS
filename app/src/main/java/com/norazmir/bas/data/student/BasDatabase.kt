@@ -26,7 +26,7 @@ abstract class BasDatabase : RoomDatabase() {
             val dao = database.get().studentDao()
 
             applicationScope.launch {
-                dao.insertStudent(Student("2016595951","Ali Bin Abu","Taman Melawati, Selangor", "SK Taman Melawati", "Abu Bin Bakar",200))
+//                dao.insertStudent(Student("2016595951","Ali Bin Abu","Taman Melawati, Selangor", "SK Taman Melawati", "Abu Bin Bakar",200))
             }
         }
     }

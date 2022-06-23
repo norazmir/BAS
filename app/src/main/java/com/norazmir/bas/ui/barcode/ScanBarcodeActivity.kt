@@ -62,17 +62,24 @@ class ScanBarcodeActivity : AppCompatActivity() {
                     loading.startLoading()
                     Handler(Looper.myLooper()!!).postDelayed({
                         loading.isDismiss()
-                        dbHandler!!.getStudentDetails(studentID)
-                        builder.setTitle("Validation Result")
-                            .setMessage("Student ID Validation success !")
-                            .setPositiveButton("OK") { _, _ ->
-                                startActivity(
-                                    Intent(
-                                        applicationContext,
-                                        StudentDetailsActivity::class.java
+                        if (studentID == "2016595951"){
+                            builder.setTitle("Validation Result")
+                                .setMessage("Student ID Validation success !")
+                                .setPositiveButton("OK") { _, _ ->
+                                    startActivity(
+                                        Intent(
+                                            applicationContext,
+                                            StudentDetailsActivity::class.java
+                                        )
                                     )
-                                )
-                            }.show()
+                                }.show()
+                        } else{
+                            builder.setTitle("Validation Result")
+                                .setMessage("Invalid Student ID")
+                                .setPositiveButton("OK") { _, _ ->
+
+                                }.show()
+                        }
                     }, 2000)
                 }
 
