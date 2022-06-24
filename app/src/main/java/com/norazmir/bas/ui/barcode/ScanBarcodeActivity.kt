@@ -1,9 +1,10 @@
 package com.norazmir.bas.ui.barcode
 
 import android.Manifest
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.sqlite.SQLiteOpenHelper
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,34 +17,37 @@ import androidx.core.content.ContextCompat
 import com.budiyev.android.codescanner.*
 import com.norazmir.bas.R
 import com.norazmir.bas.data.student.SQLiteHelper
-import com.norazmir.bas.data.student.StudentDao
+import com.norazmir.bas.databinding.ActivityScanBarcodeBinding
+import com.norazmir.bas.databinding.ActivitySplashBinding
+import com.norazmir.bas.ui.main.MainActivity
 import com.norazmir.bas.ui.student.StudentDetailsActivity
 import com.norazmir.bas.utils.LoadingDialog
 import kotlinx.android.synthetic.main.activity_scan_barcode.*
-import java.nio.file.attribute.AclEntry
 
 private const val CAMERA_REQUEST_CODE = 101
 
 @Suppress("DEPRECATION")
 class ScanBarcodeActivity : AppCompatActivity() {
 
+    private val TAG = "ScanBarcodeActivity"
+    private lateinit var binding: ActivityScanBarcodeBinding
     private lateinit var codeScanner: CodeScanner
-    var dbHandler:SQLiteHelper? = null
+    private val operator = "OPERATOR"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scan_barcode)
+        binding = ActivityScanBarcodeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-
+        var isOperator = intent.getBooleanExtra(operator, false)
         setupPersmissions()
-        codeScanner()
+        codeScanner(isOperator)
     }
 
-    private fun codeScanner() {
+    private fun codeScanner(isOperator:Boolean) {
         val loading = LoadingDialog(this)
         var builder = AlertDialog.Builder(this)
-        dbHandler = SQLiteHelper(this)
-
+        Log.d(TAG, "codeScanner isOperator: $isOperator" )
 
         codeScanner = CodeScanner(this, scanner_view)
         codeScanner.apply {
@@ -58,31 +62,60 @@ class ScanBarcodeActivity : AppCompatActivity() {
             decodeCallback = DecodeCallback {
                 runOnUiThread {
                     tv_textview.text = it.text
-                    var studentID = tv_textview.text.toString()
+                    var id = tv_textview.text.toString()
                     loading.startLoading()
                     Handler(Looper.myLooper()!!).postDelayed({
                         loading.isDismiss()
-                        if (studentID == "2016595951"){
-                            builder.setTitle("Validation Result")
-                                .setMessage("Student ID Validation success !")
-                                .setPositiveButton("OK") { _, _ ->
-                                    startActivity(
-                                        Intent(
-                                            applicationContext,
-                                            StudentDetailsActivity::class.java
-                                        )
-                                    )
-                                }.show()
-                        } else{
-                            builder.setTitle("Validation Result")
-                                .setMessage("Invalid Student ID")
-                                .setPositiveButton("OK") { _, _ ->
-
-                                }.show()
+                        when {
+                            isOperator -> {
+                                when (id) {
+                                    "2022595951" -> {
+                                        builder.setTitle("Validation Result")
+                                            .setMessage("Operator Sign On Success !")
+                                            .setPositiveButton("OK") { _, _ ->
+                                                startActivity(Intent(this@ScanBarcodeActivity, MainActivity::class.java))
+                                            }
+                                            .show()
+                                    }
+                                    else -> {
+                                        builder.setTitle("Validation Result")
+                                            .setMessage("Invalid Operator")
+                                            .setPositiveButton("OK") { dialog, _ ->
+                                                dialog.dismiss()
+                                                codeScanner.startPreview()
+                                            }
+                                            .show()
+                                    }
+                                }
+                            } else -> {
+                                when (id) {
+                                    "2022111111" -> {
+                                        builder.setTitle("Validation Result")
+                                            .setMessage("Student ID Validation success !")
+                                            .setPositiveButton("OK") { _, _ ->
+                                                startActivity(
+                                                    Intent(
+                                                        applicationContext,
+                                                        StudentDetailsActivity::class.java
+                                                    )
+                                                )
+                                                finish()
+                                            }
+                                            .show()
+                                    } else -> {
+                                        builder.setTitle("Validation Result")
+                                            .setMessage("Invalid ID")
+                                            .setPositiveButton("OK") { dialog, _ ->
+                                                dialog.dismiss()
+                                                codeScanner.startPreview()
+                                            }
+                                            .show()
+                                    }
+                                }
+                            }
                         }
                     }, 2000)
                 }
-
             }
 
             errorCallback = ErrorCallback {
@@ -106,6 +139,7 @@ class ScanBarcodeActivity : AppCompatActivity() {
         super.onPause()
         codeScanner.releaseResources()
     }
+
 
     private fun setupPersmissions() {
         val permission = ContextCompat.checkSelfPermission(

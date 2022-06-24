@@ -2,11 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.norazmir.bas">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false"/>
+        android:required="false" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,29 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.STRACE">
+        <activity android:name="com.norazmir.bas.ui.login.LoginActivity" />
         <activity
-            android:name="com.norazmir.bas.ui.login.LoginActivity"
+            android:name="com.norazmir.bas.ui.login.SplashActivity"
             android:exported="true"
-            android:label="@string/app_name">
-<!--            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        </activity>
-        <activity
-            android:name="com.norazmir.bas.ui.barcode.GenerateBarcodeActivity"
-            android:exported="true"
-            android:label="@string/app_name">
-<!--            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        </activity>
-        <activity
-            android:name="com.norazmir.bas.ui.barcode.ScanBarcodeActivity"
-            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,12 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.norazmir.bas.ui.student.StudentDetailsActivity"
-            android:exported="true"
-            android:label="@string/app_name">
-        </activity>
-
+        <activity android:name="com.norazmir.bas.ui.barcode.GenerateBarcodeActivity" />
+        <activity android:name="com.norazmir.bas.ui.main.MainActivity" />
+        <activity android:name="com.norazmir.bas.ui.barcode.ScanBarcodeActivity" />
+        <activity android:name="com.norazmir.bas.ui.student.StudentDetailsActivity" />
     </application>
 
 </manifest>

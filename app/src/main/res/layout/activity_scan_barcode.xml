@@ -22,6 +22,7 @@
         app:autoFocusButtonVisible="true"
         app:flashButtonColor="@android:color/white"
         app:flashButtonVisible="true"
+        tools:context=".ui.barcode.ScanBarcodeActivity"
         app:maskColor="#6C000000" />
 
     <TextView

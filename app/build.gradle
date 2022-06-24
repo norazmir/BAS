@@ -69,6 +69,10 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$roomVersion"
 
+    // current device location
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+
 //    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
 //    implementation('eu.livotov.labs.android:CAMView:2.0.1@aar'){transitive=true }
 }
